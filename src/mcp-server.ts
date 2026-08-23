@@ -1,6 +1,7 @@
 import { Env } from './types';
 import { GitHubClient } from './github';
 import { TOOL_DEFINITIONS, handleToolCall } from './tools';
+import { redactSensitive } from './logger';
 
 export interface JsonRpcRequest {
   jsonrpc: '2.0';
@@ -107,13 +108,14 @@ export class McpServer {
         }
       }
     } catch (err: any) {
+      const safeMessage = redactSensitive(err.message || 'Internal JSON-RPC error');
       return {
         jsonrpc: '2.0',
         id,
         error: {
           code: -32603,
-          message: err.message || 'Internal JSON-RPC error',
-          data: err.details,
+          message: safeMessage,
+          data: err.details ? JSON.parse(redactSensitive(JSON.stringify(err.details))) : undefined,
         },
       };
     }

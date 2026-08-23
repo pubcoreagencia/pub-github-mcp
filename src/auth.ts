@@ -1,7 +1,7 @@
 import { Env } from './types';
 
 export function validateAuth(request: Request, env: Env): { authorized: boolean; error?: string } {
-  const expectedToken = (env.MCP_AUTH_TOKEN || '').trim();
+  const expectedToken = (env.MCP_AUTH_TOKEN || '').trim().replace(/^["']|["']$/g, '');
   if (!expectedToken) {
     return { authorized: false, error: 'Server authentication configuration missing' };
   }
@@ -20,11 +20,13 @@ export function validateAuth(request: Request, env: Env): { authorized: boolean;
     }
   }
 
-  if (!token) {
+  const cleanToken = token.trim().replace(/^["']|["']$/g, '');
+
+  if (!cleanToken) {
     return { authorized: false, error: 'Missing Bearer token in Authorization header' };
   }
 
-  if (!timingSafeEqual(token, expectedToken)) {
+  if (!timingSafeEqual(cleanToken, expectedToken)) {
     return { authorized: false, error: 'Invalid authentication token' };
   }
 

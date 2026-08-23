@@ -1,14 +1,12 @@
 import { StructuredLog } from './types';
 
 const SENSITIVE_PATTERNS = [
-  /ghp_[a-zA-Z0-9_]{30,}/gi,
-  /gho_[a-zA-Z0-9_]{30,}/gi,
-  /github_pat_[a-zA-Z0-9_]{30,}/gi,
-  /Bearer\s+[a-zA-Z0-9_.-]{10,}/gi,
-  /"token"\s*:\s*"[^"]+"/gi,
-  /"password"\s*:\s*"[^"]+"/gi,
-  /"secret"\s*:\s*"[^"]+"/gi,
-  /"authorization"\s*:\s*"[^"]+"/gi,
+  /ghp_[a-zA-Z0-9_]{20,}/gi,
+  /gho_[a-zA-Z0-9_]{20,}/gi,
+  /github_pat_[a-zA-Z0-9_]{20,}/gi,
+  /pub_mcp_sec_[a-zA-Z0-9_]{10,}/gi,
+  /Bearer\s+[^\s"']+/gi,
+  /"(token|password|secret|authorization|key|access_token|refresh_token)"\s*:\s*"[^"]+"/gi,
 ];
 
 export function redactSensitive(input: string): string {
@@ -24,5 +22,6 @@ export function logStructured(log: StructuredLog): void {
     ...log,
     error: log.error ? redactSensitive(log.error) : undefined,
   };
-  console.log(JSON.stringify(safeLog));
+  const jsonStr = JSON.stringify(safeLog);
+  console.log(redactSensitive(jsonStr));
 }
