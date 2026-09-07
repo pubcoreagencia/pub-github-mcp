@@ -1,7 +1,7 @@
 /**
  * Módulo de Processamento Autônomo - pub-github-mcp
  * Orquestrado pelo Kernel Neural-OS & PUB DEV LOOP
- * Ciclo: #60 | Agente: neural-kernel-infra-tech-lead
+ * Ciclo: #30 | Agente: neural-kernel-infra-tech-lead
  */
 
 export interface AutonomousExecutionMeta {
@@ -13,7 +13,7 @@ export interface AutonomousExecutionMeta {
 
 export function runAutonomousOptimization(): AutonomousExecutionMeta {
   return {
-    cycle: 60,
+    cycle: 30,
     agent: 'neural-kernel-infra-tech-lead',
     timestamp: new Date().toISOString(),
     status: 'OPTIMIZED',
